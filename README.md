@@ -19,29 +19,43 @@
 # Структура проекта
 
 lab1/
-│
+
 ├── DynamicArray/
+
 │ ├── DynamicArray.h
+
 │ ├── DynamicArrayCore.c
+
 │ └── DynamicArrayAlgorithms.c
-│
+
 ├── utils/
+
 │ ├── utils.h
+
 │ └── utils.c
-│
+
 ├── UI_menu/
+
 │ ├── menu.h
+
 │ └── menu.c
-│
+
 ├── Tests/
+
 │ ├── tests_of_int.c
+
 │ ├── tests_of_int.h
+
 │ ├── tests_of_str.c
+
 │ └── tests_of_str.h
-│
+
 ├── main.c
+
 ├── Makefile
+
 ├── ЛР-1.pdf
+
 └── README.md
 
 # Основные операции
