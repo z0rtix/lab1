@@ -14,8 +14,8 @@ void test_string_create_destroy() {
     DynamicArray *arr = create(&STRING_TYPE);
 
     assert(arr != NULL);
-    assert(size(arr) == 0);
-    assert(empty(arr) == 1);
+    assert(get_size(arr) == 0);
+    assert(is_empty(arr) == 1);
     
     destroy(arr);
     printf("✅\n");
@@ -31,11 +31,11 @@ void test_string_clear() {
     push(arr, &s1);
     push(arr, &s2);
     push(arr, &s3);
-    assert(size(arr) == 3);
+    assert(get_size(arr) == 3);
     
     clear(arr);
-    assert(size(arr) == 0);
-    assert(capacity(arr) == DEFAULT_CAPACITY);
+    assert(get_size(arr) == 0);
+    assert(get_capacity(arr) == DEFAULT_CAPACITY);
     assert(arr->data != NULL);
     
     destroy(arr);
@@ -52,7 +52,7 @@ void test_string_push_get() {
     push(arr, &s2);
     push(arr, &s3);
     
-    assert(size(arr) == 3);
+    assert(get_size(arr) == 3);
     assert(strcmp(*(char**)get(arr, 0), "cat") == 0);
     assert(strcmp(*(char**)get(arr, 1), "dog") == 0);
     assert(strcmp(*(char**)get(arr, 2), "mouse") == 0);
@@ -71,22 +71,22 @@ void test_string_pop() {
     push(arr, &s1);
     push(arr, &s2);
     push(arr, &s3);
-    assert(size(arr) == 3);
+    assert(get_size(arr) == 3);
     assert(strcmp(*(char**)get(arr, 2), "хомяк") == 0);
     
     pop(arr);
-    assert(size(arr) == 2);
+    assert(get_size(arr) == 2);
     assert(strcmp(*(char**)get(arr, 1), "собака") == 0);
     
     pop(arr);
-    assert(size(arr) == 1);
+    assert(get_size(arr) == 1);
     assert(strcmp(*(char**)get(arr, 0), "кот") == 0);
     
     pop(arr);
-    assert(size(arr) == 0);
+    assert(get_size(arr) == 0);
     
     pop(arr); 
-    assert(size(arr) == 0);
+    assert(get_size(arr) == 0);
     
     destroy(arr);
     printf("✅\n");
@@ -101,21 +101,21 @@ void test_string_remove_at() {
         copies[i] = strdup(words[i]);
         push(arr, &copies[i]);
     }
-    assert(size(arr) == 5);
+    assert(get_size(arr) == 5);
     
     remove_at(arr, 2);    
-    assert(size(arr) == 4);
+    assert(get_size(arr) == 4);
     assert(strcmp(*(char**)get(arr, 0), "один") == 0);
     assert(strcmp(*(char**)get(arr, 1), "два") == 0);
     assert(strcmp(*(char**)get(arr, 2), "четыре") == 0);
     assert(strcmp(*(char**)get(arr, 3), "пять") == 0);
 
     remove_at(arr, 0);
-    assert(size(arr) == 3);
+    assert(get_size(arr) == 3);
     assert(strcmp(*(char**)get(arr, 0), "два") == 0);
     
     remove_at(arr, 2);
-    assert(size(arr) == 2);
+    assert(get_size(arr) == 2);
     assert(strcmp(*(char**)get(arr, 1), "четыре") == 0);
     
     destroy(arr);
@@ -142,18 +142,18 @@ void test_string_set() {
 void test_string_reserve() {
     printf("Тест reserve -- ");
     DynamicArray *arr = create(&STRING_TYPE);
-    int initial_capacity = capacity(arr);    
-    reserve(arr, initial_capacity + 10);
-    assert(capacity(arr) >= initial_capacity + 10);
-    assert(size(arr) == 0);
+    int initial_get_capacity = get_capacity(arr);    
+    reserve(arr, initial_get_capacity + 10);
+    assert(get_capacity(arr) >= initial_get_capacity + 10);
+    assert(get_size(arr) == 0);
     
     char *s = strdup("тест");
     push(arr, &s);
-    assert(capacity(arr) >= initial_capacity + 10);
-    assert(size(arr) == 1);
+    assert(get_capacity(arr) >= initial_get_capacity + 10);
+    assert(get_size(arr) == 1);
     
     reserve(arr, 1);
-    assert(capacity(arr) >= initial_capacity + 10);
+    assert(get_capacity(arr) >= initial_get_capacity + 10);
     
     destroy(arr);
     printf("✅\n");
@@ -168,17 +168,17 @@ void test_string_shrink_to_fit() {
         char *s = strdup(buffer);
         push(arr, &s);
     }
-    int before_capacity = capacity(arr);
-    assert(before_capacity > 20);
+    int before_get_capacity = get_capacity(arr);
+    assert(before_get_capacity > 20);
     
     for (int i = 0; i < 10; i++) {
         pop(arr);
     }
-    assert(size(arr) == 10);
+    assert(get_size(arr) == 10);
     
     shrink_to_fit(arr);    
-    assert(capacity(arr) == 10);
-    assert(size(arr) == 10);
+    assert(get_capacity(arr) == 10);
+    assert(get_size(arr) == 10);
     
     for (int i = 0; i < 10; i++) {
         char expected[20];
@@ -224,9 +224,9 @@ void test_string_copy() {
     push(original, &s3);
     DynamicArray *clone = copy(original);
     
-    assert(size(original) == size(clone));
+    assert(get_size(original) == get_size(clone));
     
-    for (int i = 0; i < size(original); i++) {
+    for (int i = 0; i < get_size(original); i++) {
         char *orig_str = *(char**)get(original, i);
         char *clone_str = *(char**)get(clone, i);
         assert(strcmp(orig_str, clone_str) == 0);
@@ -251,7 +251,7 @@ void test_string_map() {
     // print_array(arr);
     // print_array(upper);
     
-    assert(size(upper) == 3);
+    assert(get_size(upper) == 3);
     assert(strcmp(*(char**)get(upper, 0), "CAT") == 0);
     assert(strcmp(*(char**)get(upper, 1), "DOG") == 0);
     assert(strcmp(*(char**)get(upper, 2), "MOUSE") == 0);
@@ -274,7 +274,7 @@ void test_string_where() {
     push(arr, &s4);
     DynamicArray *long_words = where(arr, string_length_gt_3);
     
-    assert(size(long_words) == 2);
+    assert(get_size(long_words) == 2);
     assert(strcmp(*(char**)get(long_words, 0), "mouse") == 0);
     assert(strcmp(*(char**)get(long_words, 1), "hamster") == 0);
 
@@ -296,7 +296,7 @@ void test_string_where_starts_with_a() {
     push(arr, &s4);
     DynamicArray *a_words = where(arr, string_starts_with_a);
     
-    assert(size(a_words) == 2);
+    assert(get_size(a_words) == 2);
     assert(strcmp(*(char**)get(a_words, 0), "apple") == 0);
     assert(strcmp(*(char**)get(a_words, 1), "apricot") == 0);
 
@@ -319,7 +319,7 @@ void test_string_concat() {
     push(arr2, &b2);
     
     DynamicArray *arr3 = concat(arr1, arr2);
-    assert(size(arr3) == 4);
+    assert(get_size(arr3) == 4);
     assert(strcmp(*(char**)get(arr3, 0), "cat") == 0);
     assert(strcmp(*(char**)get(arr3, 1), "dog") == 0);
     assert(strcmp(*(char**)get(arr3, 2), "mouse") == 0);
@@ -335,19 +335,19 @@ void test_string_boundaries() {
     printf("Тест граничных случаев -- ");    
     DynamicArray *arr = create(&STRING_TYPE);
     assert(arr != NULL);
-    assert(size(arr) == 0);
-    assert(empty(arr) == 1);
+    assert(get_size(arr) == 0);
+    assert(is_empty(arr) == 1);
     assert(get(arr, 0) == NULL);
 
     pop(arr);
-    assert(size(arr) == 0);
+    assert(get_size(arr) == 0);
     
     remove_at(arr, 0);
-    assert(size(arr) == 0);
+    assert(get_size(arr) == 0);
     
     char *s1 = strdup("первый");
     push(arr, &s1);
-    assert(size(arr) == 1);
+    assert(get_size(arr) == 1);
     assert(strcmp(*(char**)get(arr, 0), "первый") == 0);
     
     assert(get(arr, -1) == NULL);
@@ -358,25 +358,25 @@ void test_string_boundaries() {
     assert(strcmp(*(char**)get(arr, 0), "первый") == 0);
     free(new_str);
     
-    int current_capacity = capacity(arr);
-    for (int i = 1; i < current_capacity; i++) {
+    int current_get_capacity = get_capacity(arr);
+    for (int i = 1; i < current_get_capacity; i++) {
         char buffer[20];
         sprintf(buffer, "str_%d", i);
         char *s = strdup(buffer);
         push(arr, &s);
     }
-    assert(size(arr) == current_capacity);
+    assert(get_size(arr) == current_get_capacity);
     
     char *last = strdup("последний");
     push(arr, &last);
-    assert(size(arr) == current_capacity + 1);
+    assert(get_size(arr) == current_get_capacity + 1);
     
     pop(arr);
-    assert(size(arr) == current_capacity);
+    assert(get_size(arr) == current_get_capacity);
     
     clear(arr);
-    assert(size(arr) == 0);
-    assert(capacity(arr) == DEFAULT_CAPACITY);
+    assert(get_size(arr) == 0);
+    assert(get_capacity(arr) == DEFAULT_CAPACITY);
     
     destroy(arr);
     printf("✅\n");
@@ -386,6 +386,7 @@ void test_string_10m_operations() {
     printf("Тест 10m operations -- ");
     clock_t start = clock();
     DynamicArray *arr = create(&STRING_TYPE);
+    reserve(arr, 10000000);
 
     char *words[] = {"cat", "dog", "mouse", "hamster", "bird", "fish", "lion", "tiger", "bear", "wolf"};
     
@@ -406,7 +407,7 @@ void test_string_arrays() {
     
     DynamicArray *arr_of_str_arrays = create(&ARRAY_TYPE);
     assert(arr_of_str_arrays != NULL);
-    assert(size(arr_of_str_arrays) == 0);
+    assert(get_size(arr_of_str_arrays) == 0);
     
     DynamicArray *words1 = create(&STRING_TYPE);
     char *s1_1 = strdup("apple");
@@ -415,7 +416,7 @@ void test_string_arrays() {
     push(words1, &s1_1);
     push(words1, &s1_2);
     push(words1, &s1_3);
-    assert(size(words1) == 3);
+    assert(get_size(words1) == 3);
     assert(strcmp(*(char**)get(words1, 0), "apple") == 0);
     assert(strcmp(*(char**)get(words1, 2), "cherry") == 0);
 
@@ -426,7 +427,7 @@ void test_string_arrays() {
     push(words2, &s2_1);
     push(words2, &s2_2);
     push(words2, &s2_3);
-    assert(size(words2) == 3);
+    assert(get_size(words2) == 3);
 
     DynamicArray *words3 = create(&STRING_TYPE);
     char *s3_1 = strdup("red");
@@ -435,7 +436,7 @@ void test_string_arrays() {
     push(words3, &s3_1);
     push(words3, &s3_2);
     push(words3, &s3_3);
-    assert(size(words3) == 3);
+    assert(get_size(words3) == 3);
 
     DynamicArray *words4 = create(&STRING_TYPE);
     char *s4_1 = strdup("one");
@@ -446,7 +447,7 @@ void test_string_arrays() {
     push(words4, &s4_2);
     push(words4, &s4_3);
     push(words4, &s4_4);
-    assert(size(words4) == 4);
+    assert(get_size(words4) == 4);
 
     DynamicArray *words5 = create(&STRING_TYPE);
     char *s5_1 = strdup("alpha");
@@ -459,7 +460,7 @@ void test_string_arrays() {
     push(words5, &s5_3);
     push(words5, &s5_4);
     push(words5, &s5_5);
-    assert(size(words5) == 5);
+    assert(get_size(words5) == 5);
     assert(strcmp(*(char**)get(words5, 4), "epsilon") == 0);
     
     push(arr_of_str_arrays, &words1);
@@ -467,18 +468,18 @@ void test_string_arrays() {
     push(arr_of_str_arrays, &words3);
     push(arr_of_str_arrays, &words4);
     push(arr_of_str_arrays, &words5);
-    assert(size(arr_of_str_arrays) == 5);
+    assert(get_size(arr_of_str_arrays) == 5);
     
     DynamicArray *first_array = *(DynamicArray**)get(arr_of_str_arrays, 0);
     assert(first_array != NULL);
-    assert(size(first_array) == 3);
+    assert(get_size(first_array) == 3);
     assert(strcmp(*(char**)get(first_array, 0), "apple") == 0);
     assert(strcmp(*(char**)get(first_array, 1), "banana") == 0);
     assert(strcmp(*(char**)get(first_array, 2), "cherry") == 0);
 
     DynamicArray *last_array = *(DynamicArray**)get(arr_of_str_arrays, 4);
     assert(last_array != NULL);
-    assert(size(last_array) == 5);
+    assert(get_size(last_array) == 5);
     assert(strcmp(*(char**)get(last_array, 0), "alpha") == 0);
     assert(strcmp(*(char**)get(last_array, 4), "epsilon") == 0);
     
@@ -501,7 +502,7 @@ void test_mix_arays() {
 
     DynamicArray *arr_of_intstr_arrays = create(&ARRAY_TYPE);
     assert(arr_of_intstr_arrays != NULL);
-    assert(size(arr_of_intstr_arrays) == 0);
+    assert(get_size(arr_of_intstr_arrays) == 0);
     
     DynamicArray *words1 = create(&STRING_TYPE);
     char *s1_1 = strdup("apple");
@@ -510,22 +511,22 @@ void test_mix_arays() {
     push(words1, &s1_1);
     push(words1, &s1_2);
     push(words1, &s1_3);
-    assert(size(words1) == 3);
+    assert(get_size(words1) == 3);
     assert(strcmp(*(char**)get(words1, 0), "apple") == 0);
     
     DynamicArray *row1 = create(&INT_TYPE);
     push(row1, &(int){1});
     push(row1, &(int){2});
     push(row1, &(int){3});
-    assert(size(row1) == 3);
+    assert(get_size(row1) == 3);
     assert(*(int*)get(row1, 0) == 1);
     
     push(arr_of_intstr_arrays, &words1);
     push(arr_of_intstr_arrays, &row1);
-    assert(size(arr_of_intstr_arrays) == 2);
+    assert(get_size(arr_of_intstr_arrays) == 2);
     
-    assert(size(*(DynamicArray**)get(arr_of_intstr_arrays, 0)) == 3);
-    assert(size(*(DynamicArray**)get(arr_of_intstr_arrays, 1)) == 3);
+    assert(get_size(*(DynamicArray**)get(arr_of_intstr_arrays, 0)) == 3);
+    assert(get_size(*(DynamicArray**)get(arr_of_intstr_arrays, 1)) == 3);
     
     DynamicArray *inner_str = *(DynamicArray**)get(arr_of_intstr_arrays, 0);
     DynamicArray *inner_int = *(DynamicArray**)get(arr_of_intstr_arrays, 1);

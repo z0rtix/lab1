@@ -1,7 +1,7 @@
 #ifndef DYNAMICARRAY_H
 #define DYNAMICARRAY_H
 
-#define DEFAULT_CAPACITY 4
+extern const int DEFAULT_CAPACITY;
 
 typedef struct TypeInfo {
     int element_size;
@@ -33,9 +33,9 @@ void remove_at(DynamicArray *array, int index);
 void *get(const DynamicArray *array, int index);
 void set(DynamicArray *array, int index, const void *element);
 
-int size(const DynamicArray *array);
-int empty(const DynamicArray *array);
-int capacity(const DynamicArray *array);
+int get_size(const DynamicArray *array);
+int is_empty(const DynamicArray *array);
+int get_capacity(const DynamicArray *array);
 
 void reserve(DynamicArray *array, int new_capacity);
 void shrink_to_fit(DynamicArray *array);

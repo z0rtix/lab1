@@ -184,7 +184,7 @@ void interactive_mode() {
         while (array_running) {
             printf("\nТекущий массив: ");
             print_array(arr);
-            printf("Размер: %d\n", size(arr));
+            printf("Размер: %d\n", get_size(arr));
             
             printf("\n=== МЕНЮ ===\n");
             printf("1 - Добавить элемент (push)\n");
@@ -215,7 +215,7 @@ void interactive_mode() {
                 }
 
                 case 3: {
-                    int s = size(arr);
+                    int s = get_size(arr);
                     if (s == 0) {
                         printf("❌ Массив пустой\n");
                         break;
@@ -239,16 +239,16 @@ void interactive_mode() {
                 }
                 
                 case 4: {
-                    if (size(arr) == 0) {
+                    if (get_size(arr) == 0) {
                         printf("❌ Массив пустой\n");
                         break;
                     }
 
-                    printf("Размер массива: %d. Введите номер элемента(при неверном вводе - 0): ", size(arr));
+                    printf("Размер массива: %d. Введите номер элемента(при неверном вводе - 0): ", get_size(arr));
                     int index;
                     scanf("%d", &index);
                     getchar();
-                    if (index >= size(arr) || index < 0) {
+                    if (index >= get_size(arr) || index < 0) {
                         printf("❌ Неверный индекс. Будет изменен элемент под номером 0.\n");
                         index = 0;
                     }
@@ -284,7 +284,7 @@ void interactive_mode() {
                 }
 
                 case 5: {
-                    int s = size(arr);
+                    int s = get_size(arr);
                     if (s == 0) {
                         printf("❌ Массив пустой\n");
                         break;
@@ -363,6 +363,5 @@ void interactive_mode() {
             }
         }
     }
-    
     printf("\nПрограмма завершена\n");
 }

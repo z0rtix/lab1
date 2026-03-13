@@ -204,8 +204,8 @@ int array_compare(const void *a, const void *b) {
     const DynamicArray *arr1 = *(const DynamicArray**)a;
     const DynamicArray *arr2 = *(const DynamicArray**)b;
 
-    if (size(arr1) != size(arr2)) {
-        return size(arr1) - size(arr2);
+    if (get_size(arr1) != get_size(arr2)) {
+        return get_size(arr1) - get_size(arr2);
     }
     return 0;
 }

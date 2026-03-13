@@ -12,8 +12,8 @@ void test_create_destroy() {
     DynamicArray *arr = create(&INT_TYPE);
 
     assert(arr != NULL);
-    assert(size(arr) == 0);
-    assert(empty(arr) == 1);
+    assert(get_size(arr) == 0);
+    assert(is_empty(arr) == 1);
 
     destroy(arr);
     printf("✅\n");
@@ -27,12 +27,12 @@ void test_clear() {
     push(arr, &y);
     push(arr, &z);
     
-    assert(size(arr) == 3);
+    assert(get_size(arr) == 3);
     
     clear(arr);
     
-    assert(size(arr) == 0);
-    assert(capacity(arr) == DEFAULT_CAPACITY);
+    assert(get_size(arr) == 0);
+    assert(get_capacity(arr) == DEFAULT_CAPACITY);
     assert(arr->data != NULL);
     
     destroy(arr);
@@ -47,7 +47,7 @@ void test_push_get() {
     push(arr, &b);
     push(arr, &c);
     
-    assert(size(arr) == 3);
+    assert(get_size(arr) == 3);
     assert(*(int*)get(arr, 0) == 42);
     assert(*(int*)get(arr, 1) == 7);
     assert(*(int*)get(arr, 2) == 100);
@@ -64,22 +64,22 @@ void test_pop() {
     push(arr, &y);
     push(arr, &z);
     
-    assert(size(arr) == 3);
+    assert(get_size(arr) == 3);
     assert(*(int*)get(arr, 2) == 99);
     
     pop(arr);
-    assert(size(arr) == 2);
+    assert(get_size(arr) == 2);
     assert(*(int*)get(arr, 1) == 7);
     
     pop(arr);
-    assert(size(arr) == 1);
+    assert(get_size(arr) == 1);
     assert(*(int*)get(arr, 0) == 42);
     
     pop(arr);
-    assert(size(arr) == 0);
+    assert(get_size(arr) == 0);
     
     pop(arr);
-    assert(size(arr) == 0);
+    assert(get_size(arr) == 0);
     
     destroy(arr);
     printf("✅\n");
@@ -90,29 +90,29 @@ void test_remove_at() {
     DynamicArray *arr = create(&INT_TYPE);
     int vals[] = {10, 20, 30, 40, 50};
     for (int i = 0; i < 5; i++) push(arr, &vals[i]);
-    assert(size(arr) == 5);
+    assert(get_size(arr) == 5);
 
     remove_at(arr, 2);
-    assert(size(arr) == 4);
+    assert(get_size(arr) == 4);
     assert(*(int*)get(arr, 0) == 10);
     assert(*(int*)get(arr, 1) == 20);
     assert(*(int*)get(arr, 2) == 40);
     assert(*(int*)get(arr, 3) == 50);
     
     remove_at(arr, 0);
-    assert(size(arr) == 3);
+    assert(get_size(arr) == 3);
     assert(*(int*)get(arr, 0) == 20);
     assert(*(int*)get(arr, 1) == 40);
     assert(*(int*)get(arr, 2) == 50);
     
     remove_at(arr, 2);
-    assert(size(arr) == 2);
+    assert(get_size(arr) == 2);
     assert(*(int*)get(arr, 0) == 20);
     assert(*(int*)get(arr, 1) == 40);
     
     remove_at(arr, -1);
     remove_at(arr, 5);
-    assert(size(arr) == 2);
+    assert(get_size(arr) == 2);
     destroy(arr);
     printf("✅\n");
 }
@@ -136,19 +136,19 @@ void test_set() {
 void test_reserve() {
     printf("Тест reserve -- ");
     DynamicArray *arr = create(&INT_TYPE);
-    int initial_capacity = capacity(arr);
+    int initial_get_capacity = get_capacity(arr);
 
-    reserve(arr, initial_capacity + 10);    
-    assert(capacity(arr) >= initial_capacity + 10);
-    assert(size(arr) == 0);
+    reserve(arr, initial_get_capacity + 10);    
+    assert(get_capacity(arr) >= initial_get_capacity + 10);
+    assert(get_size(arr) == 0);
     
     int x = 42;
     push(arr, &x);
-    assert(capacity(arr) >= initial_capacity + 10);
-    assert(size(arr) == 1);
+    assert(get_capacity(arr) >= initial_get_capacity + 10);
+    assert(get_size(arr) == 1);
     
     reserve(arr, 1);
-    assert(capacity(arr) >= initial_capacity + 10);
+    assert(get_capacity(arr) >= initial_get_capacity + 10);
     
     destroy(arr);
     printf("✅\n");
@@ -161,16 +161,16 @@ void test_shrink_to_fit() {
         push(arr, &i);
     }
 
-    int before_capacity = capacity(arr);
-    assert(before_capacity > 20);
+    int before_get_capacity = get_capacity(arr);
+    assert(before_get_capacity > 20);
     
     for (int i = 0; i < 10; i++) {
         pop(arr);
     }
-    assert(size(arr) == 10);
+    assert(get_size(arr) == 10);
     
     shrink_to_fit(arr);
-    assert(capacity(arr) == 10);
+    assert(get_capacity(arr) == 10);
     assert(*(int*)get(arr, 0) == 0);
     assert(*(int*)get(arr, 9) == 9);
     
@@ -187,7 +187,7 @@ void test_sort() {
     }
     sort(arr);
     int prev = *(int*)get(arr, 0);
-    for (int i = 1; i < size(arr); i++) {
+    for (int i = 1; i < get_size(arr); i++) {
         int curr = *(int*)get(arr, i);
         assert(prev <= curr);
         prev = curr;
@@ -205,7 +205,7 @@ void test_map() {
     }
     DynamicArray *squared = map(arr, int_map_square);
     
-    assert(size(squared) == 4);
+    assert(get_size(squared) == 4);
     assert(*(int*)get(squared, 0) == 1);
     assert(*(int*)get(squared, 1) == 4);
     assert(*(int*)get(squared, 2) == 9);
@@ -225,7 +225,7 @@ void test_where() {
     }
     DynamicArray *even = where(arr, int_is_even);
     
-    assert(size(even) == 3);
+    assert(get_size(even) == 3);
     assert(*(int*)get(even, 0) == 2);
     assert(*(int*)get(even, 1) == 4);
     assert(*(int*)get(even, 2) == 6);
@@ -245,7 +245,7 @@ void test_concat() {
     for (int i = 0; i < 3; i++) push(arr2, &a2[i]);
     DynamicArray *arr3 = concat(arr1, arr2);
     
-    assert(size(arr3) == 6);
+    assert(get_size(arr3) == 6);
     assert(*(int*)get(arr3, 0) == 1);
     assert(*(int*)get(arr3, 1) == 2);
     assert(*(int*)get(arr3, 2) == 3);
@@ -287,10 +287,10 @@ void test_copy() {
     }
     
     DynamicArray *clone = copy(original);
-    assert(size(original) == size(clone));
-    assert(size(original) == capacity(clone));
+    assert(get_size(original) == get_size(clone));
+    assert(get_size(original) == get_capacity(clone));
     
-    for (int i = 0; i < size(original); i++) {
+    for (int i = 0; i < get_size(original); i++) {
         int orig_val = *(int*)get(original, i);
         int clone_val = *(int*)get(clone, i);
         assert(orig_val == clone_val);
@@ -317,25 +317,25 @@ void test_boundaries() {
     
     DynamicArray *arr = create(&INT_TYPE);
     assert(arr != NULL);
-    assert(size(arr) == 0);
-    assert(empty(arr) == 1);
-    assert(capacity(arr) == DEFAULT_CAPACITY);
+    assert(get_size(arr) == 0);
+    assert(is_empty(arr) == 1);
+    assert(get_capacity(arr) == DEFAULT_CAPACITY);
     assert(get(arr, 0) == NULL);
     assert(get(arr, -1) == NULL);
     assert(get(arr, 5) == NULL);
     
     pop(arr);
-    assert(size(arr) == 0);
+    assert(get_size(arr) == 0);
     
     remove_at(arr, 0);
-    assert(size(arr) == 0);
+    assert(get_size(arr) == 0);
     
     int x = 42;
     push(arr, &x);
-    assert(size(arr) == 1);
-    assert(empty(arr) == 0);
+    assert(get_size(arr) == 1);
+    assert(is_empty(arr) == 0);
     assert(*(int*)get(arr, 0) == 42);
-    assert(capacity(arr) >= 1);
+    assert(get_capacity(arr) >= 1);
     assert(get(arr, -1) == NULL);
     assert(get(arr, 1) == NULL);
     assert(get(arr, 100) == NULL);
@@ -350,58 +350,58 @@ void test_boundaries() {
     set(arr, 100, &new_val);
     assert(*(int*)get(arr, 0) == 42);
     
-    int old_capacity = capacity(arr);
+    int old_get_capacity = get_capacity(arr);
     reserve(arr, 1);
-    assert(capacity(arr) == old_capacity);
+    assert(get_capacity(arr) == old_get_capacity);
     
-    reserve(arr, old_capacity + 10);
-    assert(capacity(arr) >= old_capacity + 10);
-    assert(size(arr) == 1);
+    reserve(arr, old_get_capacity + 10);
+    assert(get_capacity(arr) >= old_get_capacity + 10);
+    assert(get_size(arr) == 1);
     assert(*(int*)get(arr, 0) == 42);
     
-    int current_capacity = capacity(arr);
-    for (int i = 1; i < current_capacity; i++) {
+    int current_get_capacity = get_capacity(arr);
+    for (int i = 1; i < current_get_capacity; i++) {
         push(arr, &i);
     }
-    assert(size(arr) == current_capacity);
-    assert(capacity(arr) == current_capacity);
+    assert(get_size(arr) == current_get_capacity);
+    assert(get_capacity(arr) == current_get_capacity);
     
     int last = 999;
     push(arr, &last);
-    assert(size(arr) == current_capacity + 1);
-    assert(capacity(arr) > current_capacity);
-    assert(*(int*)get(arr, size(arr) - 1) == 999);
+    assert(get_size(arr) == current_get_capacity + 1);
+    assert(get_capacity(arr) > current_get_capacity);
+    assert(*(int*)get(arr, get_size(arr) - 1) == 999);
     
-    int old_size = size(arr);
+    int old_get_size = get_size(arr);
     pop(arr);
-    assert(size(arr) == old_size - 1);
-    assert(get(arr, old_size - 1) == NULL);
+    assert(get_size(arr) == old_get_size - 1);
+    assert(get(arr, old_get_size - 1) == NULL);
     
     int first_value = *(int*)get(arr, 0);
     remove_at(arr, 0);
-    assert(size(arr) == old_size - 2);
+    assert(get_size(arr) == old_get_size - 2);
     assert(*(int*)get(arr, 0) != first_value);
     
-    int last_index = size(arr) - 1;
+    int last_index = get_size(arr) - 1;
     remove_at(arr, last_index);
-    assert(size(arr) == old_size - 3);
+    assert(get_size(arr) == old_get_size - 3);
     assert(get(arr, last_index) == NULL);
     
     clear(arr);
-    assert(size(arr) == 0);
-    assert(capacity(arr) == DEFAULT_CAPACITY);
+    assert(get_size(arr) == 0);
+    assert(get_capacity(arr) == DEFAULT_CAPACITY);
     assert(arr->data != NULL);
     
     for (int i = 0; i < 20; i++) push(arr, &i);
-    int before_shrink_capacity = capacity(arr);
-    assert(before_shrink_capacity > 20);
+    int before_shrink_get_capacity = get_capacity(arr);
+    assert(before_shrink_get_capacity > 20);
     
     for (int i = 0; i < 10; i++) pop(arr);
-    assert(size(arr) == 10);
+    assert(get_size(arr) == 10);
     
     shrink_to_fit(arr);
-    assert(capacity(arr) == 10);
-    assert(size(arr) == 10);
+    assert(get_capacity(arr) == 10);
+    assert(get_size(arr) == 10);
     
     for (int i = 0; i < 10; i++) {
         assert(*(int*)get(arr, i) == i);
@@ -432,13 +432,13 @@ void test_int_arrays() {
     clock_t start = clock();
     DynamicArray *arr_of_arrs = create(&ARRAY_TYPE);
     assert(arr_of_arrs != NULL);
-    assert(size(arr_of_arrs) == 0);
+    assert(get_size(arr_of_arrs) == 0);
 
     DynamicArray *row1 = create(&INT_TYPE);
     push(row1, &(int){1});
     push(row1, &(int){2});
     push(row1, &(int){3});
-    assert(size(row1) == 3);
+    assert(get_size(row1) == 3);
     assert(*(int*)get(row1, 0) == 1);
     assert(*(int*)get(row1, 2) == 3);
 
@@ -446,26 +446,26 @@ void test_int_arrays() {
     push(row2, &(int){4});
     push(row2, &(int){5});
     push(row2, &(int){6});
-    assert(size(row2) == 3);
+    assert(get_size(row2) == 3);
 
     DynamicArray *row3 = create(&INT_TYPE);
     push(row3, &(int){4});
     push(row3, &(int){5});
     push(row3, &(int){6});
-    assert(size(row3) == 3);
+    assert(get_size(row3) == 3);
 
     DynamicArray *row4 = create(&INT_TYPE);
     push(row4, &(int){7});
     push(row4, &(int){8});
     push(row4, &(int){9});
-    assert(size(row4) == 3);
+    assert(get_size(row4) == 3);
 
     DynamicArray *row5 = create(&INT_TYPE);
     push(row5, &(int){11});
     push(row5, &(int){12});
     push(row5, &(int){13});
     push(row5, &(int){133});
-    assert(size(row5) == 4);
+    assert(get_size(row5) == 4);
     assert(*(int*)get(row5, 3) == 133);
 
     push(arr_of_arrs, &row1);
@@ -474,7 +474,7 @@ void test_int_arrays() {
     push(arr_of_arrs, &row4);
     push(arr_of_arrs, &row5);
     
-    assert(size(arr_of_arrs) == 5);
+    assert(get_size(arr_of_arrs) == 5);
     DynamicArray *first_row = *(DynamicArray**)get(arr_of_arrs, 0);
     assert(*(int*)get(first_row, 0) == 1);
     DynamicArray *last_row = *(DynamicArray**)get(arr_of_arrs, 4);

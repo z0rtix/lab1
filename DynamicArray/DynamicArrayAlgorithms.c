@@ -6,22 +6,21 @@
 
 void sort(DynamicArray* array) {
     if (array == NULL || array->size < 2 || array->type->element_compare == NULL) return;
+    char *temp = malloc(array->type->element_size);
+    if (temp == NULL) return;
 
     for (int i = 0; i < array->size - 1; i++) {
         for (int j = 0; j < array->size - 1 - i; j++) {
             void *current_element = (char*)array->data + j * array->type->element_size;
             void *next_element = (char*)array->data + (j + 1) * array->type->element_size;
-
-            if (array->type->element_compare(current_element, next_element) > 0) {
-                char *temp = malloc(array->type->element_size);
-                if (temp == NULL) return;
+            if (array->type->element_compare(current_element, next_element) > 0) {                
                 memcpy(temp, current_element, array->type->element_size);
                 memcpy(current_element, next_element, array->type->element_size);
                 memcpy(next_element, temp, array->type->element_size);
-                free(temp);
             }
         }
     }
+    free(temp);
 }
 
 DynamicArray *copy(const DynamicArray *array) {
@@ -37,6 +36,8 @@ DynamicArray *copy(const DynamicArray *array) {
             return NULL;
         }
         push(copy_of_array, copy_of_current);
+        free(copy_of_current);
+        // array->type->element_free(copy_of_current);
     }
 
     return copy_of_array;
@@ -63,12 +64,13 @@ DynamicArray* where(const DynamicArray* array, int (*predicate)(const void*)) {
     for (int i = 0; i < array->size; i++) {
         void* el = (char*)array->data + i * array->type->element_size;
         if (predicate(el)) {
-            void* copy = array->type->element_copy(el);
-            if (copy == NULL) {
+            void* copy_of_current = array->type->element_copy(el);
+            if (copy_of_current == NULL) {
                 destroy(array_where);
                 return NULL;
             }
-            push(array_where, copy);
+            push(array_where, copy_of_current);
+            free(copy_of_current);
         }
     }
 
@@ -89,6 +91,8 @@ DynamicArray* concat(const DynamicArray* array1, const DynamicArray* array2) {
             return NULL;
         }
         push(concat_array, copy_of_current);
+        free(copy_of_current);
+        // array2->type->element_free(copy_of_current);к
     }
 
     return concat_array;
