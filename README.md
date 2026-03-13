@@ -21,23 +21,23 @@
 lab1/
 │
 ├── DynamicArray/
-│   ├── DynamicArray.h
-│   ├── DynamicArrayCore.c
-│   └── DynamicArrayAlgorithms.c
+│ ├── DynamicArray.h
+│ ├── DynamicArrayCore.c
+│ └── DynamicArrayAlgorithms.c
 │
 ├── utils/
-│   ├── utils.h
-│   └── utils.c
+│ ├── utils.h
+│ └── utils.c
 │
 ├── UI_menu/
-│   ├── menu.h
-│   └── menu.c
+│ ├── menu.h
+│ └── menu.c
 │
 ├── Tests/
-│   ├── tests_of_int.c
-│   ├── tests_of_int.h
-│   ├── tests_of_str.c
-│   └── tests_of_str.h
+│ ├── tests_of_int.c
+│ ├── tests_of_int.h
+│ ├── tests_of_str.c
+│ └── tests_of_str.h
 │
 ├── main.c
 ├── Makefile
